@@ -175,42 +175,72 @@ world;
   characterFeatures() {
     this.playAnimation(this.IMAGES_IDLE);
     setInterval(() => {
-      if (new Date().getTime() - this.lastMove < 10000 && !this.isAboveGround()) {
-        this.playAnimation(this.IMAGES_IDLE);
-      } else if (new Date().getTime() - this.lastMove >= 10000) {
-        this.playAnimation(this.IMAGES_SLEEPING);
-        if(this.soundIsPlaying) {
-          this.playSound(this.snork_sound);
-          this.snork_sound.volume = 0.1;
-          this.soundIsPlaying = false;
-        }
-      }
-      if (this.isDead()) {
-        this.playAnimation(this.IMAGES_DEAD);
-        if(this.deadsoundIsPlaying) {
-          this.playSound(this.dying_sound);
-          this.deadsoundIsPlaying = false;
-        }
-        setTimeout(() => {
-          gameOver();
-        }, 1000);
-      } else if (this.isHurt()) {
-        this.playAnimation(this.IMAGES_HURTING);
-        if(this.hitsoundIsPlaying) {
-          this.playSound(this.hit_sound);
-          this.hitsoundIsPlaying = false;
-        }
-      } else if (this.isAboveGround()) {
-        this.playAnimation(this.IMAGES_JUMPING);
-      } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-        this.playAnimation(this.IMAGES_WALKING);
-    
-        this.lastMove = new Date().getTime();
-        if(this.walksoundIsPlaying) {
-          this.playSound(this.walking_sound);
-          this.walksoundIsPlaying = false;
-        }
-      }
+      this.charaterIdle();
+      this.charaterDead();
     }, 1000 / 10); 
+  }
+
+  /**
+   * Executes a character idle animation based on the last move time and whether the character is above the ground.
+   * If the character is not above the ground and the last move time is less than 10 seconds ago, the function plays the idle animation.
+   * If the last move time is greater than or equal to 10 seconds ago, the function plays the sleeping animation and plays the snork sound with a volume of 0.1.
+   *
+   * @return {void} No return value
+   */
+
+  charaterIdle() {
+    if (new Date().getTime() - this.lastMove < 10000 && !this.isAboveGround()) {
+      this.playAnimation(this.IMAGES_IDLE);
+    } else if (new Date().getTime() - this.lastMove >= 10000) {
+      this.playAnimation(this.IMAGES_SLEEPING);
+      if(this.soundIsPlaying) {
+        this.playSound(this.snork_sound);
+        this.snork_sound.volume = 0.1;
+        this.soundIsPlaying = false;
+      }
+    }
+  }
+
+/**
+ * Executes a series of character animations based on specific conditions and intervals.
+ *
+ * @return {void} No return value
+ */
+
+  charaterDead() {
+    if (this.isDead()) {
+      this.playAnimation(this.IMAGES_DEAD);
+      if(this.deadsoundIsPlaying) {
+        this.playSound(this.dying_sound);
+        this.deadsoundIsPlaying = false;
+      }
+      setTimeout(() => {
+        gameOver();
+      }, 1000);
+    } else if (this.isHurt()) {
+      this.characterHurt();
+    } else if (this.isAboveGround()) {
+      this.playAnimation(this.IMAGES_JUMPING);
+    } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+      this.playAnimation(this.IMAGES_WALKING);
+      this.lastMove = new Date().getTime();
+      if(this.walksoundIsPlaying) {
+        this.playSound(this.walking_sound);
+        this.walksoundIsPlaying = false;
+      }
+    }
+  }
+
+/**
+ * Plays the character's hurt animation and plays the hit sound if it is currently playing.
+ *
+ * @return {void} This function does not return anything.
+ */
+  characterHurt() {
+    this.playAnimation(this.IMAGES_HURTING);
+    if(this.hitsoundIsPlaying) {
+      this.playSound(this.hit_sound);
+      this.hitsoundIsPlaying = false;
+    }
   }
 }

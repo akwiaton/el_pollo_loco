@@ -114,27 +114,50 @@ class Endboss extends MovableObject {
 
     setInterval(() => {
     if (this.isDead()) {
-      this.playAnimation(this.IMAGES_DEAD);
-      if(this.soundIsPlaying) {
-      this.endboss_hurt.pause();
-      this.playSound(this.endboss_dead);
-      this.endboss_dead.volume = 0.1;
-      this.soundIsPlaying = false;
-      }
-      setTimeout(() => {
-        this.playSound(this.win_sound);
-        this.win_sound = 0.1;
-        youWin();
-      }, 800);
+      this.endbossDead();
     } else if (this.isHurt()) {
-      
-      this.playAnimation(this.IMAGES_HURT);
-      if(this.hitsoundIsPlaying) {
-      this.playSound(this.endboss_hurt);
-      this.endboss_hurt.volume = 0.1;
-      this.hitsoundIsPlaying = false;
-      }
+      this.endbossHurt();
     }
   }, 1000 / 10);
+  }
+
+  
+/**
+ * Executes specific actions when the end boss is dead.
+ *
+ * @return {void} No return value
+ */
+  endbossDead() {
+    this.playAnimation(this.IMAGES_DEAD);
+    if(this.soundIsPlaying) {
+    this.endboss_hurt.pause();
+    this.playSound(this.endboss_dead);
+    this.endboss_dead.volume = 0.1;
+    this.soundIsPlaying = false;
+    }
+    setTimeout(() => {
+      this.playSound(this.win_sound);
+      this.win_sound = 0.1;
+      youWin();
+    }, 800);
+  }
+  
+
+  /**
+   * Executes specific actions when the end boss is hurt.
+   *
+   * This function plays the animation for the end boss's hurt state, 
+   * and if the hitsound is currently playing, it plays the endboss_hurt sound
+   * with a reduced volume and stops the hitsound from playing again.
+   *
+   * @return {void} No return value
+   */
+  endbossHurt() {
+    this.playAnimation(this.IMAGES_HURT);
+    if(this.hitsoundIsPlaying) {
+    this.playSound(this.endboss_hurt);
+    this.endboss_hurt.volume = 0.1;
+    this.hitsoundIsPlaying = false;
+    }
   }
 }
